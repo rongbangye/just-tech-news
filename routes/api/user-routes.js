@@ -8,7 +8,10 @@ router.get("/", (req, res) => {
   // Access our User model and run .findAll() method
   // findAll() method let us query all of the users from the user table in DB
   // Equivalent SELECT * FROM users;
-  User.findAll()
+  User.findAll({
+    // Protect the password
+    attributes: { exclude: ["password"] },
+  })
     .then((dbUserData) => res.json(dbUserData))
     .catch((err) => {
       console.log(err);
@@ -20,6 +23,7 @@ router.get("/", (req, res) => {
 router.get("/:id", (req, res) => {
   // findOne() method like the following SQL query: SELECT * FROM users WHERE id = 1
   User.findOne({
+    attributes: { exclude: ["password"] },
     where: {
       id: req.params.id,
     },
@@ -51,7 +55,7 @@ router.post("/", (req, res) => {
   User.create({
     username: req.body.username,
     email: req.body.email,
-    passwork: req.body.password,
+    password: req.body.password,
   })
     .then((dbUserData) => res.json(dbUserData))
     .catch((err) => {
