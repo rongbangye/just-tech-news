@@ -12,6 +12,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(routes);
 
 // turn on connection to db and server
+// By forcing the sync method to true, we will make the tables re-create if there are any association changes.
+// This definition performs similarly to DROP TABLE IF EXISTS
+// Dropping all the tables every time the application restarts is no longer necessary and
+// in fact will constantly drop all the entries and seed data we enter, which can get very annoying.
+//change the database connection in the server.js file back to {force: false}, then save our changes and
+// restart the Express.js server again so that this change is reflected.
 sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () => console.log("Now listening"));
 });
