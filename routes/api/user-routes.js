@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 // const { where } = require("sequelize/types");
-const { User } = require("../../models");
+const { User, Post, Vote } = require("../../models");
 
 // GET /api/users
 router.get("/", (req, res) => {
@@ -27,6 +27,19 @@ router.get("/:id", (req, res) => {
     where: {
       id: req.params.id,
     },
+    // replace the existing `include` with this
+    include: [
+      {
+        model: Post,
+        attributes: ["id", "title", "post_url", "created_at"],
+      },
+      {
+        model: Post,
+        attributes: ["title"],
+        through: Vote,
+        as: "voted_posts",
+      },
+    ],
   })
     .then((dbUserData) => {
       if (!dbUserData) {
