@@ -1,6 +1,7 @@
 const User = require("./User");
 const Post = require("./Post");
 const Vote = require("./Vote");
+const Comment = require("./Comment");
 
 /**
  * The constraint we impose here is that a post can belong to one user, not many users
@@ -44,6 +45,22 @@ User.hasMany(Vote, {
 });
 
 Post.hasMany(Vote, {
+  foreignKey: "post_id",
+});
+
+Comment.belongsTo(User, {
+  foreignKey: "user_id",
+});
+
+Comment.belongsTo(Post, {
+  foreignKey: "post_id",
+});
+
+User.hasMany(Comment, {
+  foreignKey: "user_id",
+});
+
+Post.hasMany(Comment, {
   foreignKey: "post_id",
 });
 
